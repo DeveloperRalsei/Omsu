@@ -1,0 +1,3 @@
+POST https://osu.ppy.sh/oauth/token
+Content-Type: application/json
+Accept: 
