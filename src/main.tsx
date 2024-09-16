@@ -4,7 +4,9 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import { NavigationProgress } from '@mantine/nprogress';
 import App from './App';
 import '@mantine/core/styles.css';
+import '@mantine/charts/styles.css';
 import '@mantine/nprogress/styles.css';
+import { ModalsProvider } from '@mantine/modals';
 
 const root = document.getElementById("root");
 
@@ -29,7 +31,7 @@ const theme = createTheme({
     },
     components: {
         ActionIcon: {
-            defaultProps: { variant: "light" }
+            defaultProps: { variant: "light", size: "lg" }
         },
         Button: {
             defaultProps: { variant: "light" }
@@ -40,8 +42,10 @@ const theme = createTheme({
 createRoot(root!).render(
     <React.StrictMode>
         <MantineProvider theme={theme} defaultColorScheme='dark'>
-            <App />
-            <NavigationProgress />
+            <ModalsProvider>
+                <App />
+                <NavigationProgress />
+            </ModalsProvider>
         </MantineProvider>
     </React.StrictMode>
 );
