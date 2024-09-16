@@ -1,3 +1,3 @@
 # Omsu
 
-An easy osu data fetcher with
+An easy osu data fetcher

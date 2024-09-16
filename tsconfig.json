@@ -1,7 +1,20 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "target": "ESNext",                                // Modern JavaScript özellikleri için en uygun dil hedefi.
+    "module": "ESNext",                                // ESNext modül sistemi kullanımı, Vite ile uyumlu.
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],          // Tarayıcı ve modern JavaScript API'lerini destekler.
+    "jsx": "react-jsx",                                // React 17 ve üstü için JSX dönüştürme.
+    "esModuleInterop": true,                           // CommonJS modüllerini daha kolay kullanmak için.
+    "allowSyntheticDefaultImports": true,              // Varsayılan ithalatlar için izin ver.
+    "strict": true,                                    // Tüm sıkı denetimleri etkinleştirir.
+    "forceConsistentCasingInFileNames": true,          // Dosya adlarındaki büyük/küçük harf uyumsuzluğunu önler.
+    "moduleResolution": "node",                        // Node.js modül çözümleme stratejisini kullan.
+    "skipLibCheck": true,                              // Dış tip dosyalarını kontrol etmeyi atlar.
+    "isolatedModules": true,                           // Her dosyanın bağımsız olarak derlenmesini zorunlu kılar.
+    "noEmit": true,                                     // Çıktı dosyaları oluşturmaz, yalnızca hata denetimi.
+    "resolveJsonModule": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src"],                                  // Kaynak dosyalarını belirleyin.
+  "exclude": ["node_modules", "dist"]                  // Derlemeye dahil edilmeyecek dosya ve klasörler.
 }
