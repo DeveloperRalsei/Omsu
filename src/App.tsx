@@ -1,4 +1,4 @@
-import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Group, Loader, ScrollArea, Stack, Title } from "@mantine/core";
+import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, ScrollArea, Space, Stack, Title } from "@mantine/core";
 import { author } from '../package.json';
 import { IconChevronLeft, IconQuestionMark, IconUsers } from "@tabler/icons-react";
 import { useState, useTransition } from "react";
@@ -42,7 +42,6 @@ export default function () {
                      </ActionIcon>
                   </Group>
                </Group>
-               <Title order={2}>Omsu!</Title>
                <ActionIcon onClick={() => {
                   openModal({
                      title: <Title order={2}>What is Omsu?</Title>,
@@ -56,7 +55,16 @@ export default function () {
          </AppShell.Header>
 
          <AppShell.Main>
-            <Container size={"md"} mt={30}>
+            <Container size={"md"} >
+               <Space h={30} />
+               {page === 'home' && <Flex justify={"center"}>
+                  <Image src={"/img/logo.png"} alt="Logo" w={200} />   
+               </Flex>}   
+               <Title order={1} ta="center">
+                  {page === 'fetchBeatmap' && "Beatmaps"}
+                  {page === 'fetchUser' && "Users"}   
+               </Title>
+               <Space h={30} />
                {isPending ? (
                   <Stack>
                      <Loader type="bars" />

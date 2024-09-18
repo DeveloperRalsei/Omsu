@@ -11,7 +11,7 @@ import { ModalsProvider } from '@mantine/modals';
 const root = document.getElementById("root");
 
 const theme = createTheme({
-    primaryColor: "violet",
+    primaryColor: "pink",
     fontSizes: {
         xs: "30px"
     },
