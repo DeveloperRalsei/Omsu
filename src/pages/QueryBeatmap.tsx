@@ -3,7 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { nprogress } from "@mantine/nprogress";
 
-const url = import.meta.env.DEV ? 'http://localhost:3000/api' : ''
+// const url = import.meta.env.DEV ? 'http://localhost:3000/api' : 'https://omsu-api.vercel.app/api'
+const url =  'https://omsu-api.vercel.app/api'
 
 export function QueryBeatmap() {
     const [searchValue, setSearchValue] = useState<string>("")
