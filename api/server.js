@@ -6,6 +6,7 @@ import axios from "axios";
 import cors from 'cors'
 
 api.use(express.json());
+api.use(cors())
 
 api.use((req, res, next) => {
   console.log(req.ip, req.url, req.method);
