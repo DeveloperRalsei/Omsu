@@ -60,7 +60,7 @@ export function QueryBeatmap() {
       </Paper>
     </form>
 
-    <SimpleGrid cols={{ lg: 2, md: 1 }}>
+    <SimpleGrid cols={{ md: 2, sm: 1 }}>
       {beatmaps.map(BMap => {
         return <BeatmapCard beatmap={BMap} />;
       })}

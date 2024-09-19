@@ -1,4 +1,4 @@
-import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, ScrollArea, Space, Stack, Title } from "@mantine/core";
+import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, ScrollArea, Space, Stack, Title } from "@mantine/core";
 import { author } from '../package.json';
 import { IconChevronLeft, IconQuestionMark, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState, useTransition } from "react";
@@ -15,17 +15,25 @@ export default function () {
    const [page, setPage] = useState<page>("home");
    const [isPending, startTransition] = useTransition();
    const components = useMdxComps()
+   const [pingData, setPingData] = useState<any>()
 
    useEffect(() => {
       axios.get(baseUrl + "/api/ping")
-      .then(res => res.data)
+      .then(res => setPingData(res.data))
       .catch(err => console.error(err))
   }, [])
 
    return (
       <AppShell
          header={{ height: 50 }}
+         pos={"relative"}
       >
+         <LoadingOverlay 
+            visible={!pingData}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+            loaderProps={{ type: 'bars' }}
+         />
          <AppShell.Header>
             <Group w={"100%"} h={"100%"} align="center" justify="space-between" px={"sm"}>
                <Group>

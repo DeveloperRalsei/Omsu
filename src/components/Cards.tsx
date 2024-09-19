@@ -40,10 +40,10 @@ export function BeatmapCard({ beatmap }: BeatmapCardProps) {
   return (
     <Card bg={"dark"} radius={10} p={10} mah={200} onClick={openBeatmapModal}>
       <Grid>
-        <Grid.Col span={{lg: 4, md: 2}}>
-          <Image src={`${beatmap.covers.list}`} radius={5} w={120} />
+        <Grid.Col span={4}>
+          <Image src={beatmap.covers.list} radius={5} w={{}} />
         </Grid.Col>
-        <Grid.Col span={{lg: 8, md: 10}}>
+        <Grid.Col span={8}>
           <Group>
             <Title order={3}>{beatmap.title}</Title>
             <Badge variant="light" color={
@@ -66,6 +66,11 @@ export function BeatmapCard({ beatmap }: BeatmapCardProps) {
                 beatmap.ranked == 4 && "Loved" || "undefined"
               }
             </Badge>
+          </Group>
+          <Group>
+            {/* {beatmap.tags.map((tag: string,i: number) => (
+              <>{tag}</>
+            ))} */}
           </Group>
         </Grid.Col>
       </Grid>
