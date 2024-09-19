@@ -1,12 +1,13 @@
 import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, ScrollArea, Space, Stack, Title } from "@mantine/core";
 import { author } from '../package.json';
 import { IconChevronLeft, IconQuestionMark, IconUsers } from "@tabler/icons-react";
-import { useState, useTransition } from "react";
-import { Home, QueryUser, QueryBeatmap } from './pages';
+import { useEffect, useState, useTransition } from "react";
+import { Home, QueryUser, QueryBeatmap, baseUrl } from './pages';
 import './styles.css';
 import { openModal } from "@mantine/modals";
 import HelpDocument from '../documents/WhatIsThis.mdx'
 import { useMdxComps } from "./hooks/useMdxComps";
+import axios from "axios";
 
 type page = 'home' | 'fetchUser' | 'fetchBeatmap';
 
@@ -14,6 +15,12 @@ export default function () {
    const [page, setPage] = useState<page>("home");
    const [isPending, startTransition] = useTransition();
    const components = useMdxComps()
+
+   useEffect(() => {
+      axios.get(baseUrl + "/api/ping")
+      .then(res => res.data)
+      .catch(err => console.error(err))
+  }, [])
 
    return (
       <AppShell

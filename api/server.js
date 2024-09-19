@@ -51,8 +51,8 @@ async function getAccessToken() {
   return accessToken;
 }
 
-api.get("/api/fetch-beatmaps", async (req, res) => {
-  const { q } = req.query;
+api.post("/api/fetch-beatmaps", async (req, res) => {
+  const { q } = req.body;
 
   if (!q) {
     return res.status(400).json({ error: 'Enter a beatmap name: "beatmapName"' });
@@ -74,9 +74,43 @@ api.get("/api/fetch-beatmaps", async (req, res) => {
   }
 });
 
+api.get("/api/lookup", async (req, res) => {
+  try {
+    const token = await getAccessToken();
+
+    const response = await axios.get(`https://osu.ppy.sh/api/v2/beatmapsets/lookup`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json" 
+      }
+    });
+
+    return res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching beatmaps:", error.response ? error.response.data : error.message);
+    return res.status(500).json({ error: "Error fetching beatmaps" });
+  }
+});
+
+api.get("/ping", async (req,res) => {
+  const token = await getAccessToken()
+  const response = await axios.get("https://osu.ppy.sh/api/v2", {
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    
+  })
+
+  res.send({})
+})
+
 api.get("*", (req, res) => {
   res.send({ message: "Wrong Usage: " + req.url });
 });
+
 
 const port = process.env.PORT || 3000;
 api.listen(port, () => console.log(`API running | http://localhost:${port}`));
