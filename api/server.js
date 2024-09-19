@@ -1,12 +1,12 @@
 import express from "express";
 const api = express();
-import { config } from "dotenv"; 
+import { config } from "dotenv";
 config();
 import axios from "axios";
-import cors from 'cors'
+import cors from 'cors';
 
 api.use(express.json());
-api.use(cors())
+api.use(cors());
 
 api.use((req, res, next) => {
   console.log(req.ip, req.url, req.method);
@@ -18,13 +18,13 @@ let tokenExpiryTime;
 
 async function refreshToken() {
   try {
-    const tokenResponse = await axios.post("https://osu.ppy.sh/oauth/token", 
+    const tokenResponse = await axios.post("https://osu.ppy.sh/oauth/token",
       new URLSearchParams({
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_KEY,
         grant_type: "client_credentials",
         scope: "public"
-      }).toString(), 
+      }).toString(),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -51,17 +51,17 @@ async function getAccessToken() {
   return accessToken;
 }
 
-api.post("/api/fetch-beatmaps", async (req, res) => {
-  const { beatmapName } = req.body;
+api.get("/api/fetch-beatmaps", async (req, res) => {
+  const { q } = req.query;
 
-  if (!beatmapName) {
+  if (!q) {
     return res.status(400).json({ error: 'Enter a beatmap name: "beatmapName"' });
   }
 
   try {
     const token = await getAccessToken();
 
-    const response = await axios.get(`https://osu.ppy.sh/api/v2/beatmapsets/search?q=${beatmapName}`, {
+    const response = await axios.get(`https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}`, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -74,9 +74,9 @@ api.post("/api/fetch-beatmaps", async (req, res) => {
   }
 });
 
-api.get("*", (req,res) => {
-  res.send("Wrong Usage: "+req.url)
-})
+api.get("*", (req, res) => {
+  res.send({ message: "Wrong Usage: " + req.url });
+});
 
 const port = process.env.PORT || 3000;
 api.listen(port, () => console.log(`API running | http://localhost:${port}`));
