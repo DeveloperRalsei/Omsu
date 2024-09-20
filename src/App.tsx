@@ -5,30 +5,43 @@ import { useEffect, useState, useTransition } from "react";
 import { Home, QueryUser, QueryBeatmap, baseUrl } from './pages';
 import './styles.css';
 import { openModal } from "@mantine/modals";
-import HelpDocument from '../documents/WhatIsThis.mdx'
+import HelpDocument from '../documents/WhatIsThis.mdx';
 import { useMdxComps } from "./hooks/useMdxComps";
 import axios from "axios";
+import { notifications, showNotification } from "@mantine/notifications";
 
 type page = 'home' | 'fetchUser' | 'fetchBeatmap';
 
 export default function () {
    const [page, setPage] = useState<page>("home");
    const [isPending, startTransition] = useTransition();
-   const components = useMdxComps()
-   const [pingData, setPingData] = useState<any>()
+   const components = useMdxComps();
+   const [pingData, setPingData] = useState<any>();
 
    useEffect(() => {
       axios.get(baseUrl + "/api/ping")
-      .then(res => setPingData(res.data))
-      .catch(err => console.error(err))
-  }, [])
+         .then(res => {
+            setPingData(res.data);
+            showNotification({
+               message: "Connected API :3"
+            })
+         })
+         .catch(err => {
+            console.error(err);
+            showNotification({
+               message: "Something went wrong while connection api (:/). Please check your internet connection and refresh the page",
+               color: "red"
+
+            });
+         });
+   }, []);
 
    return (
       <AppShell
          header={{ height: 50 }}
          pos={"relative"}
       >
-         <LoadingOverlay 
+         <LoadingOverlay
             visible={!pingData}
             zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
@@ -60,9 +73,9 @@ export default function () {
                <ActionIcon onClick={() => {
                   openModal({
                      title: <Title order={2}>What is Omsu?</Title>,
-                     children: <HelpDocument components={components}/>,
+                     children: <HelpDocument components={components} />,
                      size: "lg"
-                  })
+                  });
                }}>
                   <IconQuestionMark />
                </ActionIcon>
@@ -73,11 +86,11 @@ export default function () {
             <Container size={"md"} >
                <Space h={30} />
                {page === 'home' && <Flex justify={"center"}>
-                  <Image src={"/img/logo.png"} alt="Logo" w={200} />   
-               </Flex>}   
+                  <Image src={"/img/logo.png"} alt="Logo" w={200} />
+               </Flex>}
                <Title order={1} ta="center">
                   {page === 'fetchBeatmap' && "Beatmaps"}
-                  {page === 'fetchUser' && "Users"}   
+                  {page === 'fetchUser' && "Users"}
                </Title>
                <Space h={30} />
                {isPending ? (

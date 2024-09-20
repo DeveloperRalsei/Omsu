@@ -52,37 +52,19 @@ async function getAccessToken() {
 }
 
 api.post("/api/fetch-beatmaps", async (req, res) => {
-  const { q } = req.body;
+  const { q, isRanked } = req.body;
 
   if (!q) {
-    return res.status(400).json({ error: 'Enter a beatmap name: "beatmapName"' });
+    return res.status(400).json({ error: 'Fill all required filters : q' });
   }
 
   try {
     const token = await getAccessToken();
 
-    const response = await axios.get(`https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}`, {
+    const url = isRanked ? `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}` : `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}&beatmapset_status=-2`
+    const response = await axios.get(url, {
       headers: {
         "Authorization": `Bearer ${token}`
-      }
-    });
-
-    return res.json(response.data);
-  } catch (error) {
-    console.error("Error fetching beatmaps:", error.response ? error.response.data : error.message);
-    return res.status(500).json({ error: "Error fetching beatmaps" });
-  }
-});
-
-api.get("/api/lookup", async (req, res) => {
-  try {
-    const token = await getAccessToken();
-
-    const response = await axios.get(`https://osu.ppy.sh/api/v2/beatmapsets/lookup`, {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json" 
       }
     });
 

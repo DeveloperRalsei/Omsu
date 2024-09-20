@@ -6,7 +6,9 @@ import App from './App';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 import '@mantine/nprogress/styles.css';
+import '@mantine/notifications/styles.css'
 import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 
 const root = document.getElementById("root");
 
@@ -43,6 +45,7 @@ createRoot(root!).render(
     <React.StrictMode>
         <MantineProvider theme={theme} defaultColorScheme='dark'>
             <ModalsProvider>
+                <Notifications />
                 <App />
                 <NavigationProgress />
             </ModalsProvider>

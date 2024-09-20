@@ -1,7 +1,8 @@
 POST http://localhost:3000/api/fetch-beatmaps
 Content-Type: application/json
 {
-  "beatmapName": "Brain Power"
+  "beatmapName": "Brain Power",
+  "isRanked": true
 }
 ###
 GET http://localhost:3000/api/lookup

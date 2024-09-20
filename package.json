@@ -17,6 +17,7 @@
     "@mantine/core": "^7.12.2",
     "@mantine/hooks": "^7.12.2",
     "@mantine/modals": "^7.12.2",
+    "@mantine/notifications": "^7.12.2",
     "@mantine/nprogress": "^7.12.2",
     "@mdx-js/rollup": "^3.0.1",
     "@tabler/icons-react": "^3.16.0",
