@@ -1,6 +1,6 @@
-import { Paper, Title, Text, Image, Card, Grid, Group, Badge, Stack, Anchor, Button, Indicator, Loader, LoadingOverlay } from "@mantine/core";
+import { Paper, Title, Text, Image, Card, Grid, Group, Badge, Stack, Anchor, Button, Indicator, Loader, LoadingOverlay, ScrollArea } from "@mantine/core";
 import { openModal } from "@mantine/modals";
-import { IconExternalLink } from "@tabler/icons-react";
+import { IconExternalLink, IconExternalLinkOff } from "@tabler/icons-react";
 import React, { Suspense } from "react";
 
 export function HomeCard({ title, children }: { title?: string, children?: React.ReactNode; }) {
@@ -44,39 +44,37 @@ export function BeatmapCard({ beatmap }: BeatmapCardProps) {
       title: <Title order={4}>{beatmap.title}</Title>,
       children: (
         <Stack>
-          <Image w={"100%"} src={beatmap.covers["card@2x"]} alt="beatmapCard" radius={"lg"}/> 
-          <Group>
-            <Text>Beatmap Creator: </Text>
-            <Text>{beatmap.creator}</Text>
-          </Group>
-          <Group>
-            <Text>Beatmap Status: </Text>
-            <Badge
-              color={
-                beatmap.ranked == -2 && "gray" ||
-                beatmap.ranked == -1 && "lime" ||
-                beatmap.ranked == 0 && "violet" ||
-                beatmap.ranked == 1 && "yellow" ||
-                beatmap.ranked == 2 && "cyan" ||
-                beatmap.ranked == 3 && "lime" ||
-                beatmap.ranked == 4 && "pink" ||
-                "lime"
-              }
-            >{beatmap.status}</Badge>
-          </Group>
-          <Group mb={50}>
-            <Text>Beatmap Tags: </Text>
+          <Button variant="light" component="a" rightSection={<IconExternalLink/>} href={`https://osu.ppy.sh/beatmapsets/${beatmap.id}`}>View the beatmap</Button>
+          <Image w={"100%"} src={beatmap.covers["card@2x"]} alt="beatmapCard" radius={"lg"} />
+          <ScrollArea h={"30vh"}>
             <Group>
-              {beatmapTags.map((tag, i) => (
-                <Badge component="a" href={`https://osu.ppy.sh/beatmapsets?q=${tag}`} target="_blank" style={{ cursor: "pointer" }} variant="light" key={i}>{tag}</Badge>
-              ))}
+              <Text>Beatmap Creator: </Text>
+              <Text>{beatmap.creator}</Text>
             </Group>
-          </Group>
-          <Group pos={"sticky"} bottom={20} right={20}>
-            <Button component="a" href={`https://osu.ppy.sh/beatmapsets/${beatmap.id}`} target="_blank">
-              View Beatmap <IconExternalLink />
-            </Button>
-          </Group>
+            <Group>
+              <Text>Beatmap Status: </Text>
+              <Badge
+                color={
+                  beatmap.ranked == -2 && "gray" ||
+                  beatmap.ranked == -1 && "lime" ||
+                  beatmap.ranked == 0 && "violet" ||
+                  beatmap.ranked == 1 && "yellow" ||
+                  beatmap.ranked == 2 && "cyan" ||
+                  beatmap.ranked == 3 && "lime" ||
+                  beatmap.ranked == 4 && "pink" ||
+                  "lime"
+                }
+              >{beatmap.status}</Badge>
+            </Group>
+            <Group mb={50}>
+              <Text>Beatmap Tags: </Text>
+              <Group>
+                {beatmapTags.map((tag, i) => (
+                  <Badge component="a" href={`https://osu.ppy.sh/beatmapsets?q=${tag}`} target="_blank" style={{ cursor: "pointer" }} variant="light" key={i}>{tag}</Badge>
+                ))}
+              </Group>
+            </Group>
+          </ScrollArea>
         </Stack>
       ),
       size: "lg",

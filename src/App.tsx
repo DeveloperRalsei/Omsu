@@ -8,7 +8,7 @@ import { openModal } from "@mantine/modals";
 import HelpDocument from '../documents/WhatIsThis.mdx';
 import { useMdxComps } from "./hooks/useMdxComps";
 import axios from "axios";
-import { notifications, showNotification } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 
 type page = 'home' | 'fetchUser' | 'fetchBeatmap';
 
@@ -40,6 +40,7 @@ export default function () {
       <AppShell
          header={{ height: 50 }}
          pos={"relative"}
+         footer={{height: 20, offset: false}}
       >
          <LoadingOverlay
             visible={!pingData}

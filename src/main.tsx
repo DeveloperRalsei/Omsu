@@ -13,7 +13,7 @@ import { Notifications } from '@mantine/notifications';
 const root = document.getElementById("root");
 
 const theme = createTheme({
-    primaryColor: "violet",
+    primaryColor: "pink",
     fontSizes: {
         xs: "30px"
     },
