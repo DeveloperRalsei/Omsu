@@ -1,4 +1,4 @@
-import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, ScrollArea, Space, Stack, Title } from "@mantine/core";
+import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, ScrollArea, Space, Stack, Text, Title } from "@mantine/core";
 import { author } from '../package.json';
 import { IconChevronLeft, IconQuestionMark, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState, useTransition } from "react";
@@ -24,14 +24,14 @@ export default function () {
             setPingData(res.data);
             showNotification({
                message: "Connected API :3"
-            })
+            });
          })
          .catch(err => {
             console.error(err);
             showNotification({
                message: "Something went wrong while connection api (:/). Please check your internet connection and refresh the page",
-               color: "red"
-
+               color: "red",
+               autoClose: 5000
             });
          });
    }, []);
@@ -70,15 +70,17 @@ export default function () {
                      </ActionIcon>
                   </Group>
                </Group>
-               <ActionIcon onClick={() => {
-                  openModal({
-                     title: <Title order={2}>What is Omsu?</Title>,
-                     children: <HelpDocument components={components} />,
-                     size: "lg"
-                  });
-               }}>
-                  <IconQuestionMark />
-               </ActionIcon>
+               <Group>
+                  <ActionIcon onClick={() => {
+                     openModal({
+                        title: <Title order={2}>What is Omsu?</Title>,
+                        children: <HelpDocument components={components} />,
+                        size: "lg"
+                     });
+                  }}>
+                     <IconQuestionMark />
+                  </ActionIcon>
+               </Group>
             </Group>
          </AppShell.Header>
 
@@ -86,7 +88,10 @@ export default function () {
             <Container size={"md"} >
                <Space h={30} />
                {page === 'home' && <Flex justify={"center"}>
-                  <Image src={"/img/logo.png"} alt="Logo" w={200} />
+                  <Group>
+                     <Image src={"/img/logo.png"} alt="Logo" w={80} />
+                     <Title>Welcome to Omsu!</Title>
+                  </Group>
                </Flex>}
                <Title order={1} ta="center">
                   {page === 'fetchBeatmap' && "Beatmaps"}

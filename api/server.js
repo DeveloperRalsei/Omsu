@@ -9,7 +9,10 @@ api.use(express.json());
 api.use(cors());
 
 api.use((req, res, next) => {
-  console.log(req.ip, req.url, req.method);
+  console.log(req.ip, req.url, req.query, req.method);
+  if (req.method != 'GET') {
+    console.log(req.body);
+  }
   next();
 });
 
@@ -61,7 +64,9 @@ api.post("/api/fetch-beatmaps", async (req, res) => {
   try {
     const token = await getAccessToken();
 
-    const url = isRanked ? `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}` : `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}&beatmapset_status=-2`
+    const url = !isRanked
+      ? `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}&beatmapset_status=-2`
+      : `https://osu.ppy.sh/api/v2/beatmapsets/search?q=${q}&beatmapset_status=0`;
     const response = await axios.get(url, {
       headers: {
         "Authorization": `Bearer ${token}`
@@ -75,19 +80,16 @@ api.post("/api/fetch-beatmaps", async (req, res) => {
   }
 });
 
-api.get("/ping", async (req,res) => {
-  const token = await getAccessToken()
-  const response = await axios.get("https://osu.ppy.sh/api/v2", {
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    
-  })
+api.get("/ping", async (req, res) => {
+  try {
+    const token = await getAccessToken();
 
-  res.send({})
-})
+    res.send({ message: "Ping action succesful" });
+  } catch (error) {
+    res.send({ message: error });
+
+  }
+});
 
 api.get("*", (req, res) => {
   res.send({ message: "Wrong Usage: " + req.url });

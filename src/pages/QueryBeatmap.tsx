@@ -1,20 +1,21 @@
-import { ActionIcon, SegmentedControl, Grid, Paper, SimpleGrid, Stack, TextInput, Image, Group, Pagination, Checkbox } from "@mantine/core";
+import { ActionIcon, SegmentedControl, Grid, Paper, SimpleGrid, Stack, TextInput, Image, Group, Pagination, Checkbox, Text, DEFAULT_THEME, Box, Loader, Fieldset } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { nprogress } from "@mantine/nprogress";
 import { BeatmapCard } from "../components/Cards";
 import { IconSearch } from "@tabler/icons-react";
 import { baseUrl } from '.';
+import { showNotification } from "@mantine/notifications";
 
 export function QueryBeatmap() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [beatmaps, setBeatmaps] = useState([]);
   const [isFirstSearch, setIsFirstSearch] = useState<boolean>(true);
   const [activePage, setPage] = useState(1);
-  const [isRanked, setIsRanked] = useState<boolean>(true)
+  const [isRanked, setIsRanked] = useState<boolean>(true);
 
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(beatmaps.length / itemsPerPage); 
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(beatmaps.length / itemsPerPage);
 
   async function fetchOsuBeatmapData(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,10 +30,13 @@ export function QueryBeatmap() {
 
       setBeatmaps(response.data.beatmapsets || []);
       nprogress.complete();
-      console.log(beatmaps)
+      console.log(beatmaps);
     } catch (error) {
       console.error(error);
       nprogress.complete();
+      showNotification({
+        message: "Something went wrong while trying to connect api 😿️. Please check your internet connection and refresh page"
+      });
     }
   }
 
@@ -59,18 +63,14 @@ export function QueryBeatmap() {
           </Grid.Col>
         </Grid>
 
-        <Paper p={"xs"} w={"100%"} withBorder mt={10}>
+        <Fieldset legend="FILTER" p={"xs"} w={"100%"} mt={10}>
           <Group>
-            <SegmentedControl
-              data={[
-                { label: <Image src={"/img/osu.png"} w={20} />, value: "osu" },
-                { label: <Image src={"/img/osumania.png"} w={20} />, value: "mania" }
-              ]}
-              withItemsBorders={false}
-            />
-            <Checkbox checked={isRanked} label="Ranked" onChange={e => setIsRanked(e.target.checked)}/>
+            <Checkbox checked={isRanked} label="Ranked" onChange={e => setIsRanked(e.target.checked)} />
+            <Box>
+              NOTE: <Text c={DEFAULT_THEME.colors.gray[5]}>I'm working on fetching unranked beatmaps</Text>
+            </Box>
           </Group>
-        </Paper>
+        </Fieldset>
       </form>
 
       <Group w={"100%"} justify="center">
