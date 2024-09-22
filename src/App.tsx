@@ -1,6 +1,6 @@
 import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, ScrollArea, Space, Stack, Text, Title } from "@mantine/core";
 import { author } from '../package.json';
-import { IconChevronLeft, IconQuestionMark, IconUsers } from "@tabler/icons-react";
+import { IconChevronLeft, IconHome, IconHome2, IconHomeFilled, IconQuestionMark, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState, useTransition } from "react";
 import { Home, QueryUser, QueryBeatmap, baseUrl } from './pages';
 import './styles.css';
@@ -40,7 +40,7 @@ export default function () {
       <AppShell
          header={{ height: 50 }}
          pos={"relative"}
-         footer={{height: 20, offset: false}}
+         footer={{ height: 20, offset: false }}
       >
          <LoadingOverlay
             visible={!pingData}
@@ -52,7 +52,7 @@ export default function () {
             <Group w={"100%"} h={"100%"} align="center" justify="space-between" px={"sm"}>
                <Group>
                   {page !== 'home' && <ActionIcon onClick={() => startTransition(() => setPage("home"))} size={"lg"}>
-                     <IconChevronLeft />
+                     <IconHomeFilled color="#fff" />
                   </ActionIcon>}
                   <ButtonGroup visibleFrom="sm">
                      <Button leftSection={<IconUsers color="#fff" />} onClick={() => startTransition(() => setPage("fetchUser"))}>
@@ -123,3 +123,18 @@ export default function () {
       </AppShell>
    );
 }
+
+export type beatmapset = {
+   id: number;
+   title: string,
+   creator: string,
+   tags: string;
+   ranked: -2 | -1 | 0 | 1 | 2 | 3 | 4,
+   covers: {
+      "card": string;
+      "card@2x": string;
+      "list": string;
+   };
+   status: string;
+   favourite_count: number;
+};

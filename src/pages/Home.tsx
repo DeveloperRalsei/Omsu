@@ -1,5 +1,5 @@
 import { Grid, List, NumberFormatter } from "@mantine/core";
-import { HomeCard } from "../components/Cards";
+import { HomeCard } from "../components/cards";
 
 export function Home() {
     return (

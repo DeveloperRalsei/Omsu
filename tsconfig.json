@@ -13,7 +13,7 @@
     "isolatedModules": true,    
     "noEmit": true,
     "resolveJsonModule": true,
-    "types": ["vite/client", ""]
+    "types": ["vite/client"]
   },
   "include": ["src", "api"],
   "exclude": ["node_modules", "dist"]

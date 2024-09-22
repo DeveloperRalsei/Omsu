@@ -1,9 +1,9 @@
-import { ActionIcon, SegmentedControl, Grid, Paper, SimpleGrid, Stack, TextInput, Image, Group, Pagination, Checkbox, Text, DEFAULT_THEME, Box, Loader, Fieldset } from "@mantine/core";
+import { ActionIcon, Grid, SimpleGrid, Stack, TextInput, Group, Pagination, Checkbox, Text, DEFAULT_THEME, Box, Fieldset, Flex } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { nprogress } from "@mantine/nprogress";
-import { BeatmapCard } from "../components/Cards";
-import { IconSearch } from "@tabler/icons-react";
+import { BeatmapSetCard } from "../components/cards";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import { baseUrl } from '.';
 import { showNotification } from "@mantine/notifications";
 
@@ -30,7 +30,7 @@ export function QueryBeatmap() {
 
       setBeatmaps(response.data.beatmapsets || []);
       nprogress.complete();
-      console.log(beatmaps);
+      console.log(response.data.beatmapsets);
     } catch (error) {
       console.error(error);
       nprogress.complete();
@@ -45,11 +45,16 @@ export function QueryBeatmap() {
     activePage * itemsPerPage
   );
 
+  const clearAction = () => {
+    setSearchValue("")
+    setBeatmaps([])
+  }
+
   return (
     <Stack mb={40}>
       <form onSubmit={fetchOsuBeatmapData}>
         <Grid columns={12}>
-          <Grid.Col span={11}>
+          <Grid.Col span={10}>
             <TextInput
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
@@ -57,9 +62,14 @@ export function QueryBeatmap() {
             />
           </Grid.Col>
           <Grid.Col span={1}>
-            <ActionIcon type="submit" w={"100%"}>
-              <IconSearch />
-            </ActionIcon>
+            <Flex w={"100%"} gap={8}>
+              <ActionIcon w={"100%"} type="submit">
+                <IconSearch />
+              </ActionIcon>
+              <ActionIcon type="reset" w={"100%"} onClick={clearAction}>
+                <IconX />
+              </ActionIcon>
+            </Flex>
           </Grid.Col>
         </Grid>
 
@@ -80,8 +90,8 @@ export function QueryBeatmap() {
       <SimpleGrid cols={{ md: 2, sm: 1 }}>
         {isFirstSearch && "Search something to start"}
         {!beatmaps.length && !isFirstSearch && "Couldn't find anything 3:"}
-        {paginatedBeatmaps.map((BMap: any) => {
-          return <BeatmapCard key={BMap.id} beatmap={BMap} />;
+        {paginatedBeatmaps.map((BMapSet: any) => {
+          return <BeatmapSetCard key={BMapSet.id} beatmapset={BMapSet} />;
         })}
       </SimpleGrid>
     </Stack>
