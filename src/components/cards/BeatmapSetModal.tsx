@@ -38,7 +38,7 @@ export function BeatmapsetSetModalContent({ beatmapset }: BeatmapSetModalContent
           <Text>Beatmapset Tags: </Text>
           <Group>
             {beatmapsetTags.map((tag, i) => (
-              <Badge component="a" href={`https://osu.ppy.sh/beatmapsetsets?q=${tag}`} target="_blank" style={{ cursor: "pointer" }} variant="light" key={i}>{tag}</Badge>
+              <Badge component="a" href={`https://osu.ppy.sh/beatmapsets?q=${tag}`} target="_blank" style={{ cursor: "pointer" }} variant="light" key={i}>{tag}</Badge>
             ))}
           </Group>
         </Group>

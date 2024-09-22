@@ -1,6 +1,6 @@
-import { ActionIcon, ActionIconGroup, Anchor, AppShell, Box, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, ScrollArea, Space, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Anchor, AppShell, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, Space, Stack,  Title } from "@mantine/core";
 import { author } from '../package.json';
-import { IconChevronLeft, IconHome, IconHome2, IconHomeFilled, IconQuestionMark, IconUsers } from "@tabler/icons-react";
+import { IconHomeFilled, IconQuestionMark, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState, useTransition } from "react";
 import { Home, QueryUser, QueryBeatmap, baseUrl } from './pages';
 import './styles.css';
@@ -91,7 +91,7 @@ export default function () {
                {page === 'home' && <Flex justify={"center"}>
                   <Group>
                      <Image src={"/img/logo.png"} alt="Logo" w={80} />
-                     <Title>Welcome to Omsu!</Title>
+                     <Title order={1}>Welcome to Omsu!</Title>
                   </Group>
                </Flex>}
                <Title order={1} ta="center">
@@ -137,4 +137,8 @@ export type beatmapset = {
    };
    status: string;
    favourite_count: number;
+   beatmaps: {
+      id: number,
+      mode: "osu" | "taiko" | "fruits" | "mania"
+   }[]
 };
