@@ -54,8 +54,8 @@ async function getAccessToken() {
   return accessToken;
 }
 
-api.post("/api/fetch-beatmaps", async (req, res) => {
-  const { q, isRanked } = req.body;
+api.get("/api/fetch-beatmaps", async (req, res) => {
+  const { q, isRanked } = req.query;
 
   if (!q) {
     return res.status(400).json({ error: 'Fill all required filters : q' });
@@ -89,6 +89,43 @@ api.get("/ping", async (req, res) => {
     res.send({ message: error });
 
   }
+});
+
+api.get("/api/search-user", async (req, res) => {
+  const { q, page } = req.query;
+
+  try {
+    const token = await getAccessToken();
+
+    const queryString = typeof q === 'string' ? q : ""
+    const pageString = typeof page === 'string' ? page: "1"
+
+    const params = new URLSearchParams({
+      "mode": "user",
+      "query": queryString,
+      "page": pageString
+    });
+
+    const url = "https://osu.ppy.sh/api/v2/search?" + params;
+
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+
+      });
+
+      res.send(response.data);
+    } catch (error) {
+      res.status(500).send({ message: "Somehthing went wrong", error: error });
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Error occured while trying to get token", error: error });
+  }
+
 });
 
 api.get("*", (req, res) => {

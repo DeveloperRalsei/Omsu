@@ -142,3 +142,11 @@ export type beatmapset = {
       mode: "osu" | "taiko" | "fruits" | "mania"
    }[]
 };
+
+export type User = {
+   id: number,
+   username: string,
+   avatar_url: string,
+   is_active: boolean,
+   is_online: boolean
+}

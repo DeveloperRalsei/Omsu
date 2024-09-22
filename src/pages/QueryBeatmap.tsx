@@ -23,14 +23,15 @@ export function QueryBeatmap() {
     setIsFirstSearch(false);
 
     try {
-      const response = await axios.post(`${baseUrl}/api/fetch-beatmaps`, {
-        q: searchValue || " ",
-        isRanked
-      });
-
+      const response = await axios.get(`${baseUrl}/api/fetch-beatmaps?q=${searchValue}&isRanked=${isRanked}` );
+      
       setBeatmaps(response.data.beatmapsets || []);
       nprogress.complete();
-      console.log(response.data.beatmapsets);
+      
+      if(import.meta.env.DEV) {
+        console.log(response.data.beatmapsets);
+      }
+
     } catch (error) {
       console.error(error);
       nprogress.complete();
