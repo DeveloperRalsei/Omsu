@@ -1,6 +1,6 @@
 import { Stack, Grid, TextInput, Flex, ActionIcon, Fieldset, Group, Checkbox, Box, DEFAULT_THEME, Pagination, SimpleGrid } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import { BeatmapSetCard, UserCard } from "../components/cards";
+import { BeatmapSetCard, UserCard } from "../ui/cards";
 import { FormEvent, useState } from "react";
 import { baseUrl } from ".";
 import axios from "axios";

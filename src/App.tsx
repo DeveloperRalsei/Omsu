@@ -1,8 +1,8 @@
-import { ActionIcon, Anchor, AppShell, Button, ButtonGroup, Container, Flex, Group, Image, Loader, LoadingOverlay, Space, Stack,  Title } from "@mantine/core";
+import { ActionIcon, Anchor, AppShell, Button, ButtonGroup, Container, Group, Image, Loader, LoadingOverlay, Space, Stack, Title } from "@mantine/core";
 import { author } from '../package.json';
-import { IconHomeFilled, IconQuestionMark, IconUsers } from "@tabler/icons-react";
+import { IconQuestionMark, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState, useTransition } from "react";
-import { Home, QueryUser, QueryBeatmap, baseUrl } from './pages';
+import { QueryUser, QueryBeatmap, baseUrl } from './pages';
 import './styles.css';
 import { openModal } from "@mantine/modals";
 import HelpDocument from '../documents/WhatIsThis.mdx';
@@ -10,10 +10,10 @@ import { useMdxComps } from "./hooks/useMdxComps";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 
-type page = 'home' | 'fetchUser' | 'fetchBeatmap';
+type page = | 'fetchUser' | 'fetchBeatmap';
 
 export default function () {
-   const [page, setPage] = useState<page>("home");
+   const [page, setPage] = useState<page>("fetchBeatmap");
    const [isPending, startTransition] = useTransition();
    const components = useMdxComps();
    const [pingData, setPingData] = useState<any>();
@@ -51,9 +51,10 @@ export default function () {
          <AppShell.Header>
             <Group w={"100%"} h={"100%"} align="center" justify="space-between" px={"sm"}>
                <Group>
-                  {page !== 'home' && <ActionIcon onClick={() => startTransition(() => setPage("home"))} size={"lg"}>
-                     <IconHomeFilled color="#fff" />
-                  </ActionIcon>}
+                  <Group>
+                     <Image src={"/img/logo.png"} alt="Logo" w={40} />
+                     <Title order={3}>Welcome to Omsu!</Title>
+                  </Group>
                   <ButtonGroup visibleFrom="sm">
                      <Button leftSection={<IconUsers color="#fff" />} onClick={() => startTransition(() => setPage("fetchUser"))}>
                         Fetch Users
@@ -88,12 +89,6 @@ export default function () {
          <AppShell.Main>
             <Container size={"md"} >
                <Space h={30} />
-               {page === 'home' && <Flex justify={"center"}>
-                  <Group>
-                     <Image src={"/img/logo.png"} alt="Logo" w={80} />
-                     <Title order={1}>Welcome to Omsu!</Title>
-                  </Group>
-               </Flex>}
                <Title order={1} ta="center">
                   {page === 'fetchBeatmap' && "Beatmaps"}
                   {page === 'fetchUser' && "Users"}
@@ -105,7 +100,6 @@ export default function () {
                   </Stack>
                ) : (
                   <Stack>
-                     {page === 'home' && <Home />}
                      {page === 'fetchUser' && <QueryUser />}
                      {page === 'fetchBeatmap' && <QueryBeatmap />}
                   </Stack>
@@ -139,8 +133,8 @@ export type beatmapset = {
    favourite_count: number;
    beatmaps: {
       id: number,
-      mode: "osu" | "taiko" | "fruits" | "mania"
-   }[]
+      mode: "osu" | "taiko" | "fruits" | "mania";
+   }[];
 };
 
 export type User = {
@@ -148,5 +142,5 @@ export type User = {
    username: string,
    avatar_url: string,
    is_active: boolean,
-   is_online: boolean
-}
+   is_online: boolean;
+};

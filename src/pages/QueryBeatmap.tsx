@@ -2,7 +2,7 @@ import { ActionIcon, Grid, SimpleGrid, Stack, TextInput, Group, Pagination, Chec
 import axios from "axios";
 import { useState } from "react";
 import { nprogress } from "@mantine/nprogress";
-import { BeatmapSetCard } from "../components/cards";
+import { BeatmapSetCard } from "../ui/cards";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { baseUrl } from '.';
 import { showNotification } from "@mantine/notifications";

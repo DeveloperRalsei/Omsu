@@ -23,7 +23,7 @@ export default function BeatmapSetCard({ beatmapset }: BeatmapSetCardProps) {
     <Card bg={"dark"} radius={10} p={10} mah={350} pos={"relative"} onClick={openBeatmapModal} style={{ cursor: "pointer" }}>
       <Grid>
         <Grid.Col span={4}>
-          <Indicator position="top-start" color={
+          <Indicator zIndex={1} position="top-start" color={
             beatmapset.ranked == -2 && "gray" ||
             beatmapset.ranked == -1 && "lime" ||
             beatmapset.ranked == 0 && "violet" ||
