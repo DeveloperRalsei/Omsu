@@ -60,6 +60,7 @@ export function QueryBeatmap() {
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
               placeholder="Query Beatmaps"
+              autoFocus
             />
           </Grid.Col>
           <Grid.Col span={1}>
