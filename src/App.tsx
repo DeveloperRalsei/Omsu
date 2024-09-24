@@ -75,7 +75,7 @@ export default function () {
       navbar={{
         breakpoint: "md",
         width: 250,
-        collapsed: { desktop: false, mobile: false },
+        collapsed: { desktop: false, mobile: true },
       }}
     >
       <LoadingOverlay
