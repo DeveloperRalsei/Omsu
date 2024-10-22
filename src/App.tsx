@@ -169,6 +169,10 @@ export default function () {
         </Container>
       </AppShell.Main>
 
+      <AppShell.Footer>
+         
+      </AppShell.Footer>
+
       <AppShell.Footer px={30}>
         <Group gap={5} w={"100%"} justify="end">
           Made By{" "}
