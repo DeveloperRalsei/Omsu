@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Anchor,
   AppShell,
+  Button,
   Container,
   Group,
   Image,
@@ -12,6 +13,7 @@ import {
   Space,
   Stack,
   Title,
+  useMantineTheme,
 } from "@mantine/core";
 import { author } from "../package.json";
 import { IconQuestionMark, IconUsers } from "@tabler/icons-react";
@@ -32,6 +34,7 @@ export default function () {
   const [isPending, startTransition] = useTransition();
   const components = useMdxComps();
   const [pingData, setPingData] = useState<any>();
+  const theme = useMantineTheme();
 
   useEffect(() => {
     axios
@@ -56,7 +59,7 @@ export default function () {
   useHotkeys([
     ["ctrl+1", () => setPage("fetchBeatmap")],
     ["ctrl+2", () => setPage("fetchUser")],
-    ["shift+*", openHelpModal]
+    ["shift+*", openHelpModal],
   ]);
 
   function openHelpModal() {
@@ -76,8 +79,7 @@ export default function () {
         breakpoint: "md",
         width: 250,
         collapsed: { desktop: false, mobile: true },
-      }}
-    >
+      }}>
       <LoadingOverlay
         visible={!pingData}
         zIndex={1000}
@@ -116,32 +118,35 @@ export default function () {
           h={"100%"}
           align="center"
           justify="space-between"
-          px={"sm"}
-        >
+          px={"sm"}>
           <Group>
-            <Group>
+            <Group visibleFrom="sm">
               <Image src={"/img/logo.png"} alt="Logo" w={40} />
               <Title order={3}>Welcome to Omsu!</Title>
             </Group>
             <Group hiddenFrom="md">
-              <ActionIcon
-                size={"lg"}
-                onClick={() => startTransition(() => setPage("fetchUser"))}
-              >
-                <IconUsers color="#fff" />
-              </ActionIcon>
-              <ActionIcon
-                size={"lg"}
-                onClick={() => startTransition(() => setPage("fetchBeatmap"))}
-              >
-                <img src={"/img/osu.png"} alt="osu image" width={20} />
-              </ActionIcon>
+              <Button
+                color={page === "fetchBeatmap" ? "dark" : theme.primaryColor}
+                disabled={page === "fetchBeatmap"}
+                onClick={() => setPage("fetchBeatmap")}>
+                <Group>
+                  <img src={"/img/osu.png"} alt="osu image" width={20} />
+                  {"Beatmaps"}
+                </Group>
+              </Button>
+              <Button
+                color={page === "fetchUser" ? "dark" : theme.primaryColor}
+                disabled={page === "fetchUser"}
+                onClick={() => setPage("fetchUser")}>
+                <Group>
+                  <IconUsers color="#fff" />
+                  {"Users"}
+                </Group>
+              </Button>
             </Group>
           </Group>
           <Group>
-            <ActionIcon
-              onClick={openHelpModal}
-            >
+            <ActionIcon onClick={openHelpModal}>
               <IconQuestionMark />
             </ActionIcon>
           </Group>
@@ -169,9 +174,7 @@ export default function () {
         </Container>
       </AppShell.Main>
 
-      <AppShell.Footer>
-         
-      </AppShell.Footer>
+      <AppShell.Footer></AppShell.Footer>
 
       <AppShell.Footer px={30}>
         <Group gap={5} w={"100%"} justify="end">
@@ -197,7 +200,7 @@ export type beatmapset = {
     list: string;
   };
   status: string;
-  favourite_count: number;
+  favorite_count: number;
   beatmaps: {
     id: number;
     mode: "osu" | "taiko" | "fruits" | "mania";
@@ -210,4 +213,24 @@ export type User = {
   avatar_url: string;
   is_active: boolean;
   is_online: boolean;
+  playmode: "osu" | "mania" | "fruits" | "taiko";
+  statistics: {
+    global_rank: number;
+    country_rank: number;
+    total_score: number;
+    pp: number;
+    play_time: number;
+    play_count: number;
+    level: {
+      progress: number;
+      current: number;
+    };
+    grade_counts: {
+      a: number;
+      s: number;
+      sh: number;
+      ss: number;
+      ssh: number;
+    };
+  };
 };

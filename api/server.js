@@ -94,7 +94,7 @@ api.get("/ping", async (req, res) => {
   try {
     const token = await getAccessToken();
 
-    res.send({ message: "Ping action succesful" });
+    res.send({ message: "Ping action successful" });
   } catch (error) {
     res.send({ message: error });
   }
@@ -128,11 +128,11 @@ api.get("/api/search-user", async (req, res) => {
 
       res.send(response.data);
     } catch (error) {
-      res.status(500).send({ message: "Somehthing went wrong", error: error });
+      res.status(500).send({ message: "Something went wrong", error: error });
     }
   } catch (error) {
     res.status(500).send({
-      message: "Error occured while trying to get token",
+      message: "Error occurred while trying to get token",
       error: error,
     });
   }
@@ -143,7 +143,7 @@ api.get("/api/user/:id", async (req, res) => {
 
   try {
     const token = await getAccessToken();
-    const response = await axios.get(`${url}/${req.params.id}/osu`, {
+    const response = await axios.get(`${url}/${req.params.id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -60,7 +60,7 @@ export default function BeatmapSetCard({ beatmapset }: BeatmapSetCardProps) {
         </Grid.Col>
       </Grid>
       <Group pos={"absolute"} bottom={5} right={5} gap={5}>
-        <Text>{beatmapset.favourite_count}</Text>
+        <Text>{beatmapset.favorite_count}</Text>
         <IconHeartFilled style={{
           color: "var(--mantine-color-red-8)"
         }} />
