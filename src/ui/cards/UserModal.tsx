@@ -10,7 +10,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { User } from "../../App";
+import { User } from "../../types";
 import { IconExternalLink } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { baseUrl } from "../../pages";

@@ -10,3 +10,9 @@ GET http://localhost:3000/api/lookup
 GET http://localhost:3000/ping
 ###
 GET https://localhost:3000/api/search-user?q=test&page=1
+###
+
+GET http://localhost:3000/api/beatmapset/43812
+###
+
+GET http://localhost:3000/api/search-user?q=test

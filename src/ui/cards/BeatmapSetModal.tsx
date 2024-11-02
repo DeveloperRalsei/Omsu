@@ -1,48 +1,132 @@
-import { Stack, Button, ScrollArea, Group, Badge, Text, Image } from "@mantine/core";
+import {
+  Text,
+  Badge,
+  Button,
+  Grid,
+  Group,
+  Image,
+  Loader,
+  Stack,
+  Title,
+  Indicator,
+  Accordion,
+  ScrollArea,
+} from "@mantine/core";
+import { beatmapset } from "../../types";
+import { useEffect, useState } from "react";
+import { baseUrl } from "../../pages";
 import { IconExternalLink } from "@tabler/icons-react";
-import { beatmapset } from "../../App";
+import { BeatmapCard } from "./BeatmapCard";
 
-type BeatmapSetModalContentProps = {
-  beatmapset: beatmapset
-}
+export function BeatmapsetSetModalContent({
+  beatmapset,
+}: {
+  beatmapset: beatmapset;
+}) {
+  const [loading, setLoading] = useState(false);
+  const [fetchedBeatmapset, setFetchedBeatmapset] = useState<beatmapset>();
 
-export function BeatmapsetSetModalContent({ beatmapset }: BeatmapSetModalContentProps) {
+  useEffect(() => {
+    async function fetchBeatmapset() {
+      setLoading(true);
 
-  const beatmapsetTags = beatmapset.tags.split(" ");
+      try {
+        const response = await fetch(
+          `${baseUrl}/api/beatmapset/${beatmapset.id}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Nuh uh! NO beatmapset");
+        }
+
+        const data = await response.json();
+
+        setFetchedBeatmapset(data);
+
+        if (import.meta.env.DEV) console.log(fetchedBeatmapset);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBeatmapset();
+  }, []);
+
+  if (loading || !fetchedBeatmapset)
+    return (
+      <Group w={"100%"}>
+        <Loader />
+      </Group>
+    );
+
+  const statusColor =
+    (fetchedBeatmapset.ranked == -2 && "gray") ||
+    (fetchedBeatmapset.ranked == -1 && "lime") ||
+    (fetchedBeatmapset.ranked == 0 && "violet") ||
+    (fetchedBeatmapset.ranked == 1 && "yellow") ||
+    (fetchedBeatmapset.ranked == 2 && "cyan") ||
+    (fetchedBeatmapset.ranked == 3 && "lime") ||
+    (fetchedBeatmapset.ranked == 4 && "pink") ||
+    "lime";
 
   return (
     <Stack>
-      <Button variant="light" component="a" target="_blank" rightSection={<IconExternalLink />} href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`}>View the beatmapset</Button>
-      <Image w={"100%"} src={beatmapset.covers["card@2x"]} alt="beatmapsetCard" radius={"sm"} />
-      <ScrollArea h={"30vh"}>
-        <Group>
-          <Text>Beatmapset Creator: </Text>
-          <Text>{beatmapset.creator}</Text>
-        </Group>
-        <Group>
-          <Text>Beatmapset Status: </Text>
-          <Badge
-            color={
-              beatmapset.ranked == -2 && "gray" ||
-              beatmapset.ranked == -1 && "lime" ||
-              beatmapset.ranked == 0 && "violet" ||
-              beatmapset.ranked == 1 && "yellow" ||
-              beatmapset.ranked == 2 && "cyan" ||
-              beatmapset.ranked == 3 && "lime" ||
-              beatmapset.ranked == 4 && "pink" ||
-              "lime"
-            }
-          >{beatmapset.status}</Badge>
-        </Group>
-        <Group mb={50}>
-          <Text>Beatmapset Tags: </Text>
-          <Group>
-            {beatmapsetTags.map((tag, i) => (
-              <Badge component="a" href={`https://osu.ppy.sh/beatmapsets?q=${tag}`} target="_blank" style={{ cursor: "pointer" }} variant="light" key={i}>{tag}</Badge>
-            ))}
-          </Group>
-        </Group>
-      </ScrollArea>
+      <Grid>
+        <Grid.Col span={{ lg: 4, xs: 12 }}>
+          <Stack>
+            <Image
+              visibleFrom="lg"
+              src={fetchedBeatmapset!.covers["list@2x"]}
+              alt="beatmapset-card"
+              radius="sm"
+              w={"100%"}
+            />
+            <Image
+              hiddenFrom="lg"
+              src={fetchedBeatmapset!.covers["card@2x"]}
+              alt="beatmapset-card"
+              radius="sm"
+              w={"100%"}
+            />
+            <Button
+              component="a"
+              href={`https://osu.ppy.sh/beatmapsets/${fetchedBeatmapset.id}`}
+              target="_blank"
+              rightSection={<IconExternalLink size={18} />}>
+              View Beatmapset
+            </Button>
+          </Stack>
+        </Grid.Col>
+
+        <Grid.Col span={{ lg: 8, xs: 12 }}>
+          <ScrollArea h={"35vh"}>
+            <Stack>
+              <Group>
+                <Text>Beatmapset Status: </Text>
+                <Badge variant="light" color={statusColor}>
+                  {fetchedBeatmapset.status}
+                </Badge>
+              </Group>
+              <Accordion variant="separated">
+                <Accordion.Item value="beatmaps">
+                  <Accordion.Control>
+                    Beatmaps ({fetchedBeatmapset.beatmaps.length})
+                  </Accordion.Control>
+                  <Accordion.Panel>
+                    <Stack>
+                      {fetchedBeatmapset.beatmaps.map((beatmap) => (
+                        <BeatmapCard beatmap={beatmap} key={beatmap.id} />
+                      ))}
+                    </Stack>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+            </Stack>
+          </ScrollArea>
+        </Grid.Col>
+      </Grid>
     </Stack>
   );
 }

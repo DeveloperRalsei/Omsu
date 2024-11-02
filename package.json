@@ -8,6 +8,10 @@
     "name": "Developer Ralsei",
     "url": "https://developerRalsei.github.io"
   },
+  "workspaces": [
+    ".",
+    "api"
+  ],
   "scripts": {
     "predeploy": "npm run build",
     "dev": "vite & cd api; npm run dev",

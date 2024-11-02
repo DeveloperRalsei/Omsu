@@ -165,6 +165,27 @@ api.get("/api/user/:id", async (req, res) => {
   }
 });
 
+api.get("/api/beatmapset/:id", async (req, res) => {
+  const url = "https://osu.ppy.sh/api/v2/beatmapsets/";
+
+  try {
+    const token = await getAccessToken();
+
+    const response = await axios.get(url + req.params.id, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    res.send(response.data);
+  } catch (error) {
+    console.error("Error fetching beatmapset:", error);
+    res.status(500).send({ message: "Error fetching beatmapset", error });
+  }
+});
+
 api.get("*", (req, res) => {
   res.send({ message: "Wrong Usage: " + req.url });
 });
