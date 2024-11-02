@@ -19,7 +19,7 @@ import { baseUrl } from ".";
 import axios from "axios";
 import { nprogress } from "@mantine/nprogress";
 import { showNotification } from "@mantine/notifications";
-import { User } from "../App";
+import { User } from "../types";
 
 export function QueryUser() {
   const [searchValue, setSearchValue] = useState<string>("");
