@@ -1,189 +1,180 @@
 import {
-  ActionIcon,
-  Anchor,
-  AppShell,
-  Button,
-  Container,
-  Group,
-  Image,
-  Kbd,
-  Loader,
-  LoadingOverlay,
-  NavLink,
-  Space,
-  Stack,
-  Title,
-  useMantineTheme,
+    ActionIcon,
+    AppShell,
+    Container,
+    Group,
+    Image,
+    Kbd,
+    Loader,
+    NavLink,
+    Space,
+    Stack,
+    Title,
+    Tooltip,
+    useMantineTheme,
 } from "@mantine/core";
-import { author } from "../package.json";
-import { IconQuestionMark, IconUsers } from "@tabler/icons-react";
-import { useEffect, useState, useTransition } from "react";
-import { QueryUser, QueryBeatmap, baseUrl } from "./pages";
+import { IconNews, IconQuestionMark, IconUsers } from "@tabler/icons-react";
+import { Suspense, lazy } from "react";
 import "./styles.css";
 import { openModal } from "@mantine/modals";
 import HelpDocument from "../documents/WhatIsThis.mdx";
 import { useMdxComps } from "./hooks/useMdxComps";
-import axios from "axios";
-import { showNotification } from "@mantine/notifications";
 import { useHotkeys } from "@mantine/hooks";
+export const baseUrl = import.meta.env.DEV
+    ? "http://localhost:3000"
+    : "https://omsu-api.onrender.com";
 
-type page = "fetchUser" | "fetchBeatmap";
+import { usePage } from "./ui/context/PageContext";
+import ReviewNews from "./pages/ReviewNews";
+
+const QueryBeatmap = lazy(() => import("./pages/QueryBeatmap"));
+const QueryUsers = lazy(() => import("./pages/QueryUser"));
+const News = lazy(() => import("./pages/News"));
 
 export default function () {
-  const [page, setPage] = useState<page>("fetchBeatmap");
-  const [isPending, startTransition] = useTransition();
-  const components = useMdxComps();
-  const [pingData, setPingData] = useState<any>();
-  const theme = useMantineTheme();
+    const { currentPage: page, setPage } = usePage();
+    const components = useMdxComps();
+    const theme = useMantineTheme();
 
-  useEffect(() => {
-    axios
-      .get(baseUrl + "/api/ping")
-      .then((res) => {
-        setPingData(res.data);
-        showNotification({
-          message: "Connected API :3",
+    useHotkeys([
+        ["ctrl+1", () => setPage("fetchBeatmap")],
+        ["ctrl+2", () => setPage("fetchUser")],
+        ["ctrl+3", () => setPage("news")],
+        ["shift+*", openHelpModal],
+    ]);
+
+    function openHelpModal() {
+        openModal({
+            title: <Title order={2}>What is Omsu?</Title>,
+            children: <HelpDocument components={components} />,
+            size: "lg",
         });
-      })
-      .catch((err) => {
-        console.error(err);
-        showNotification({
-          message:
-            "Something went wrong while connection api (:/). Please check your internet connection and refresh the page",
-          color: "red",
-          autoClose: 5000,
-        });
-      });
-  }, []);
+    }
 
-  useHotkeys([
-    ["ctrl+1", () => setPage("fetchBeatmap")],
-    ["ctrl+2", () => setPage("fetchUser")],
-    ["shift+*", openHelpModal],
-  ]);
+    return (
+        <AppShell
+            header={{ height: 50 }}
+            pos={"relative"}
+            footer={{ height: 20, offset: false }}
+            navbar={{
+                breakpoint: "md",
+                width: 250,
+                collapsed: { desktop: false, mobile: true },
+            }}>
+            <AppShell.Navbar>
+                <NavLink
+                    label="Query Beatmapsets"
+                    leftSection={
+                        <img src={"/img/osu.png"} alt="osu image" width={20} />
+                    }
+                    rightSection={
+                        <>
+                            <Kbd size="xs">Ctrl</Kbd> + <Kbd size="xs">1</Kbd>
+                        </>
+                    }
+                    onClick={() => setPage("fetchBeatmap")}
+                    active={page === "fetchBeatmap"}
+                />
+                <NavLink
+                    label="Query Users"
+                    leftSection={<IconUsers color="#fff" />}
+                    rightSection={
+                        <>
+                            <Kbd size="xs">Ctrl</Kbd> + <Kbd size="xs">2</Kbd>
+                        </>
+                    }
+                    onClick={() => setPage("fetchUser")}
+                    active={page === "fetchUser"}
+                />
+                <NavLink
+                    label="News"
+                    leftSection={<IconNews color="#fff" />}
+                    rightSection={
+                        <>
+                            <Kbd size="xs">Ctrl</Kbd> + <Kbd size="xs">3</Kbd>
+                        </>
+                    }
+                    onClick={() => setPage("news")}
+                    active={page === "news"}
+                />
+            </AppShell.Navbar>
 
-  function openHelpModal() {
-    openModal({
-      title: <Title order={2}>What is Omsu?</Title>,
-      children: <HelpDocument components={components} />,
-      size: "lg",
-    });
-  }
-
-  return (
-    <AppShell
-      header={{ height: 50 }}
-      pos={"relative"}
-      footer={{ height: 20, offset: false }}
-      navbar={{
-        breakpoint: "md",
-        width: 250,
-        collapsed: { desktop: false, mobile: true },
-      }}>
-      <LoadingOverlay
-        visible={!pingData}
-        zIndex={1000}
-        overlayProps={{ radius: "sm", blur: 2 }}
-        loaderProps={{ type: "bars" }}
-      />
-
-      <AppShell.Navbar>
-        <NavLink
-          label="Query Beatmapsets"
-          leftSection={<img src={"/img/osu.png"} alt="osu image" width={20} />}
-          rightSection={
-            <>
-              <Kbd size="xs">Ctrl</Kbd> + <Kbd size="xs">1</Kbd>
-            </>
-          }
-          onClick={() => setPage("fetchBeatmap")}
-          active={page === "fetchBeatmap"}
-        />
-        <NavLink
-          label="Query Users"
-          leftSection={<IconUsers color="#fff" />}
-          rightSection={
-            <>
-              <Kbd size="xs">Ctrl</Kbd> + <Kbd size="xs">2</Kbd>
-            </>
-          }
-          onClick={() => setPage("fetchUser")}
-          active={page === "fetchUser"}
-        />
-      </AppShell.Navbar>
-
-      <AppShell.Header>
-        <Group
-          w={"100%"}
-          h={"100%"}
-          align="center"
-          justify="space-between"
-          px={"sm"}>
-          <Group>
-            <Group visibleFrom="sm">
-              <Image src={"/img/logo.png"} alt="Logo" w={40} />
-              <Title order={3}>Welcome to Omsu!</Title>
-            </Group>
-            <Group hiddenFrom="md">
-              <Button
-                color={page === "fetchBeatmap" ? "dark" : theme.primaryColor}
-                disabled={page === "fetchBeatmap"}
-                onClick={() => setPage("fetchBeatmap")}>
-                <Group>
-                  <img src={"/img/osu.png"} alt="osu image" width={20} />
-                  {"Beatmaps"}
+            <AppShell.Header>
+                <Group
+                    w={"100%"}
+                    h={"100%"}
+                    align="center"
+                    justify="space-between"
+                    px={"sm"}>
+                    <Group>
+                        <Group visibleFrom="sm">
+                            <Image src={"/img/logo.png"} alt="Logo" w={40} />
+                            <Title order={3}>Welcome to Omsu!</Title>
+                        </Group>
+                        <Group hiddenFrom="md">
+                            <Tooltip label="News">
+                                <ActionIcon
+                                    onClick={() => setPage("news")}
+                                    disabled={page === "news"}>
+                                    <IconNews color="white" />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label="Beatmaps">
+                                <ActionIcon
+                                    color={
+                                        page === "fetchBeatmap"
+                                            ? "dark"
+                                            : theme.primaryColor
+                                    }
+                                    disabled={page === "fetchBeatmap"}
+                                    onClick={() => setPage("fetchBeatmap")}>
+                                    <img
+                                        src={"/img/osu.png"}
+                                        alt="osu image"
+                                        width={20}
+                                    />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label="Users">
+                                <ActionIcon
+                                    color={
+                                        page === "fetchUser"
+                                            ? "dark"
+                                            : theme.primaryColor
+                                    }
+                                    disabled={page === "fetchUser"}
+                                    onClick={() => setPage("fetchUser")}>
+                                    <IconUsers color="#fff" />
+                                </ActionIcon>
+                            </Tooltip>
+                        </Group>
+                    </Group>
+                    <Group>
+                        <ActionIcon onClick={openHelpModal}>
+                            <IconQuestionMark />
+                        </ActionIcon>
+                    </Group>
                 </Group>
-              </Button>
-              <Button
-                color={page === "fetchUser" ? "dark" : theme.primaryColor}
-                disabled={page === "fetchUser"}
-                onClick={() => setPage("fetchUser")}>
-                <Group>
-                  <IconUsers color="#fff" />
-                  {"Users"}
-                </Group>
-              </Button>
-            </Group>
-          </Group>
-          <Group>
-            <ActionIcon onClick={openHelpModal}>
-              <IconQuestionMark />
-            </ActionIcon>
-          </Group>
-        </Group>
-      </AppShell.Header>
+            </AppShell.Header>
 
-      <AppShell.Main>
-        <Container size={"md"}>
-          <Space h={30} />
-          <Title order={1} ta="center">
-            {page === "fetchBeatmap" && "Beatmaps"}
-            {page === "fetchUser" && "Users"}
-          </Title>
-          <Space h={30} />
-          {isPending ? (
-            <Stack>
-              <Loader type="bars" />
-            </Stack>
-          ) : (
-            <Stack>
-              {page === "fetchUser" && <QueryUser />}
-              {page === "fetchBeatmap" && <QueryBeatmap />}
-            </Stack>
-          )}
-        </Container>
-      </AppShell.Main>
-
-      <AppShell.Footer></AppShell.Footer>
-
-      <AppShell.Footer px={30}>
-        <Group gap={5} w={"100%"} justify="end">
-          Made By{" "}
-          <Anchor href={author.url} target="_blank">
-            {author.name}
-          </Anchor>
-        </Group>
-      </AppShell.Footer>
-    </AppShell>
-  );
+            <AppShell.Main>
+                <Container size={"md"}>
+                    <Space h={30} />
+                    <Title order={1} ta="center">
+                        {page === "fetchBeatmap" && "Beatmaps"}
+                        {page === "fetchUser" && "Users"}
+                    </Title>
+                    <Space h={30} />
+                    <Suspense fallback={<Loader type="dots" />}>
+                        <Stack>
+                            {page === "fetchUser" && <QueryUsers />}
+                            {page === "fetchBeatmap" && <QueryBeatmap />}
+                            {page === "news" && <News />}
+                            {page === "newsletter" && <ReviewNews />}
+                        </Stack>
+                    </Suspense>
+                </Container>
+            </AppShell.Main>
+        </AppShell>
+    );
 }

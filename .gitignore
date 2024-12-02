@@ -14,6 +14,7 @@ dist-ssr
 env.ts
 .env
 tsconfig.tsbuildinfo
+package-lock.json
 
 # Editor directories and files
 .vscode/*
