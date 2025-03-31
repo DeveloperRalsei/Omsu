@@ -21,7 +21,7 @@ const api = express();
 
 api.use(express.json(), cors());
 api.use((req, _, next) => {
-    console.log(req.ip, req.url, req.query, req.method);
+    console.log(req.ip, req.url, req.method);
     next();
 });
 

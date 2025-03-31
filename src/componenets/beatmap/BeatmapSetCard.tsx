@@ -19,19 +19,6 @@ type BeatmapSetCardProps = {
 };
 
 export default function BeatmapSetCard({ beatmapset }: BeatmapSetCardProps) {
-    function openBeatmapModal() {
-        openModal({
-            title: (
-                <Title order={4}>
-                    {beatmapset.title} by {beatmapset.creator}
-                </Title>
-            ),
-            children: <BeatmapsetSetModalContent beatmapset={beatmapset} />,
-            size: "lg",
-            pos: "relative",
-        });
-    }
-
     return (
         <Card
             bg={"dark"}
@@ -39,8 +26,8 @@ export default function BeatmapSetCard({ beatmapset }: BeatmapSetCardProps) {
             p={10}
             mah={350}
             pos={"relative"}
-            onClick={openBeatmapModal}
-            style={{ cursor: "pointer" }}>
+            style={{ cursor: "pointer" }}
+        >
             <Grid>
                 <Grid.Col span={4} pos="relative">
                     <Indicator
@@ -55,7 +42,8 @@ export default function BeatmapSetCard({ beatmapset }: BeatmapSetCardProps) {
                             (beatmapset.ranked == 3 && "lime") ||
                             (beatmapset.ranked == 4 && "pink") ||
                             "lime"
-                        }>
+                        }
+                    >
                         <Image
                             src={beatmapset.covers.list}
                             radius={5}

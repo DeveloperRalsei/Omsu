@@ -1,3 +1,10 @@
+import {
+    Modes_names,
+    beatmap_statuses,
+    beatmap_sorting,
+    beatmap_category,
+} from "osu-api-extended";
+
 export type beatmap = {
     id: number;
     mode: "osu" | "taiko" | "fruits" | "mania";
@@ -72,4 +79,13 @@ export type Newsletter = {
     first_image: string;
     preview: string;
     published_at: string;
+};
+
+export type BeatmapFormValues = {
+    q: string;
+    mode: Modes_names;
+    status: beatmap_statuses;
+    nfsw: boolean;
+    sort: beatmap_sorting;
+    categories: beatmap_category[];
 };

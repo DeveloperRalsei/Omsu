@@ -1,18 +1,33 @@
 import { showNotification } from "@mantine/notifications";
-import { beatmapset, Newsletter } from "./types";
+import { BeatmapFormValues, beatmapset, Newsletter } from "./types";
 
 export const wait = (milliseconds: number = 1000) =>
     new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 export const loadApp = () => fetch("/api/ping").then((res) => res.json());
 
-export const getBeatmapsets = async (
-    q: string = "",
-    isRanked: boolean = true,
-): Promise<beatmapset[]> =>
-    fetch(`/api/beatmapsets?q=${q}&isRanked=${isRanked ? "1" : "0"}`).then(
-        (res) => res.json(),
-    );
+export const getBeatmapsets = async ({
+    q,
+    status,
+    mode,
+    sort,
+    nfsw,
+    categories,
+}: BeatmapFormValues): Promise<beatmapset[]> => {
+    const params = new URLSearchParams();
+
+    if (q) params.append("q", q);
+    if (status) params.append("status", status);
+    if (mode) params.append("mode", mode);
+    if (sort) params.append("sort", sort);
+    if (nfsw) params.append("nfsw", "1");
+    if (categories.length > 0)
+        params.append("categories", categories.join(","));
+
+    const res = await fetch(`/api/beatmapsets?${params.toString()}`);
+    if (!res.ok) throw new Error("Failed to fetch beatmapsets");
+    return res.json();
+};
 
 export const getNews = async (): Promise<Newsletter[]> => {
     const res = await fetch("/api/news");

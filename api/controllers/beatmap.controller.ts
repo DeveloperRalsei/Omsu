@@ -1,16 +1,25 @@
-import axios from "axios";
 import { RequestHandler } from "express";
-import { getAccessToken } from "../utils/token";
-import { v2 } from "osu-api-extended";
-
-const baseUrl = "https://osu.ppy.sh/api/v2";
+import {
+    beatmap_category,
+    beatmap_sorting,
+    beatmap_statuses,
+    Modes_names,
+    v2,
+} from "osu-api-extended";
 
 export const fetchBeatmaps: RequestHandler = async (req, res) => {
-    const { q, isRanked, mode } = req.query;
+    const { q, nfsw, mode, status, sort, categories } = req.params;
 
     const { beatmapsets, error } = await v2.search({
         type: "beatmaps",
         query: q as string,
+        _nsfw: nfsw === "1",
+        status: (status as beatmap_statuses) || "any",
+        mode: mode as Modes_names,
+        sort: sort as beatmap_sorting,
+        category: categories
+            ? ((categories as string).split(",") as beatmap_category[])
+            : [],
     });
 
     if (error != null) res.status(500).send(error);

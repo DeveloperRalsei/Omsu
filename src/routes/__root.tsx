@@ -1,9 +1,4 @@
-import {
-    Link,
-    Outlet,
-    createRootRoute,
-    useLocation,
-} from "@tanstack/react-router";
+import { Outlet, createRootRoute, useLocation } from "@tanstack/react-router";
 import App from "../App";
 import { routes } from "../data/routes";
 import { NotFoundComponent } from "../componenets/app/not-found-component";
@@ -46,7 +41,6 @@ function RootComponent() {
 
     return (
         <App title={title?.label!}>
-            <Title order={2}>This app is currently broken</Title>
             <Outlet />
         </App>
     );
