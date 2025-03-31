@@ -73,5 +73,3 @@ export type Newsletter = {
     preview: string;
     published_at: string;
 };
-
-export type page = "fetchUser" | "fetchBeatmap" | "news" | "newsletter";

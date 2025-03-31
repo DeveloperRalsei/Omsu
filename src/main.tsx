@@ -2,16 +2,28 @@ import { createRoot } from "react-dom/client";
 import React from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { NavigationProgress } from "@mantine/nprogress";
-import App from "./App";
+import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/nprogress/styles.css";
 import "@mantine/notifications/styles.css";
-import { ModalsProvider } from "@mantine/modals";
-import { Notifications } from "@mantine/notifications";
-import { PageProvider } from "./ui/context/PageContext";
+import "./styles.css";
 
 const root = document.getElementById("root");
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+    interface Register {
+        router: typeof router;
+    }
+}
+
+const queryClient = new QueryClient();
 
 const theme = createTheme({
     primaryColor: "pink",
@@ -39,19 +51,24 @@ const theme = createTheme({
         Button: {
             defaultProps: { variant: "light" },
         },
+        Tootlip: {
+            defaultProps: {
+                events: { touch: true },
+            },
+        },
     },
 });
 
 createRoot(root!).render(
     <React.StrictMode>
-        <MantineProvider theme={theme} defaultColorScheme="dark">
+        <MantineProvider theme={theme} forceColorScheme="dark">
+            <Notifications />
             <ModalsProvider>
-                <PageProvider>
-                    <Notifications />
-                    <App />
-                    <NavigationProgress />
-                </PageProvider>
+                <QueryClientProvider client={queryClient}>
+                    <RouterProvider router={router} />
+                </QueryClientProvider>
+                <NavigationProgress />
             </ModalsProvider>
         </MantineProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
 );

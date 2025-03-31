@@ -1,20 +1,16 @@
 {
     "name": "osu-api",
     "private": true,
-    "version": "0.0.1",
+    "version": "0.1.0-beta",
     "type": "module",
     "homepage": "https://developerRalsei.github.io/Omsu/",
     "author": {
         "name": "Developer Ralsei",
         "url": "https://developerRalsei.github.io"
     },
-    "workspaces": [
-        ".",
-        "api"
-    ],
     "scripts": {
         "predeploy": "npm run build",
-        "dev": "vite & cd api; npm run dev",
+        "dev": "tsx watch api/server.ts & vite",
         "build": "tsc -b && vite build",
         "preview": "vite preview",
         "deploy": "gh-pages -d ./dist"
@@ -28,21 +24,39 @@
         "@mantine/nprogress": "^7.12.2",
         "@mdx-js/rollup": "^3.0.1",
         "@tabler/icons-react": "^2.0.0",
+        "@tanstack/react-query": "^5.67.3",
+        "@tanstack/react-router": "^1.114.15",
         "axios": "^1.7.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "front-matter": "^4.0.2",
+        "osu-api-extended": "^3.0.18",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "recharts": "^2.13.3"
+        "react-markdown": "^10.1.0",
+        "recharts": "^2.13.3",
+        "rehype-raw": "^7.0.0",
+        "remark-gfm": "^4.0.1",
+        "tsx": "^4.19.3"
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
+        "@tanstack/router-devtools": "^1.114.15",
+        "@tanstack/router-plugin": "^1.114.15",
+        "@types/cors": "^2.8.17",
+        "@types/dotenv": "^6.1.1",
+        "@types/express": "^5.0.1",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
         "@types/react-transition-group": "^4.4.11",
         "@vitejs/plugin-react": "^4.3.1",
         "gh-pages": "^6.1.1",
         "globals": "^15.9.0",
+        "tsconfig-paths": "^4.2.0",
         "typescript": "^5.5.3",
         "typescript-eslint": "^8.0.1",
-        "vite": "^5.4.1"
+        "vite": "^5.4.1",
+        "vite-tsconfig-paths": "^5.1.4"
     }
 }
