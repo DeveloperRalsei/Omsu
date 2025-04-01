@@ -17,7 +17,6 @@ export default defineConfig(({ mode }) => {
             tsconfigpaths(),
             mdx(),
         ],
-        envPrefix: "APP_",
         server: {
             hmr: true,
             proxy: {
