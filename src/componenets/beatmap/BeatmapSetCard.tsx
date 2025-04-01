@@ -9,10 +9,9 @@ import {
     Text,
     Tooltip,
 } from "@mantine/core";
-import { openModal } from "@mantine/modals";
 import { IconAlertCircle, IconHeartFilled } from "@tabler/icons-react";
-import { BeatmapsetSetModalContent } from "./BeatmapSetModal";
 import { beatmapset } from "../../types";
+import { Link } from "@tanstack/react-router";
 
 type BeatmapSetCardProps = {
     beatmapset: beatmapset;
@@ -26,6 +25,8 @@ export default function BeatmapSetCard({ beatmapset }: BeatmapSetCardProps) {
             p={10}
             mah={350}
             pos={"relative"}
+            component={Link}
+            to={`/beatmapset/${beatmapset.id}`}
             style={{ cursor: "pointer" }}
         >
             <Grid>

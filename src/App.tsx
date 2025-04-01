@@ -35,6 +35,11 @@ export default function App({
             () =>
                 navigate({
                     to: "/",
+                    search: {
+                        q: "",
+                        nfsw: false,
+                        status: "any",
+                    },
                 }),
         ],
         ["ctrl+2", () => navigate({ to: "/users" })],

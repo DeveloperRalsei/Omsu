@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import {
-    beatmap_category,
+    beatmap_genres,
     beatmap_sorting,
     beatmap_statuses,
     Modes_names,
@@ -8,22 +8,24 @@ import {
 } from "osu-api-extended";
 
 export const fetchBeatmaps: RequestHandler = async (req, res) => {
-    const { q, nfsw, mode, status, sort, categories } = req.params;
+    const { q, nfsw, mode, status, sort, genre } = req.query;
 
-    const { beatmapsets, error } = await v2.search({
-        type: "beatmaps",
-        query: q as string,
-        _nsfw: nfsw === "1",
-        status: (status as beatmap_statuses) || "any",
-        mode: mode as Modes_names,
-        sort: sort as beatmap_sorting,
-        category: categories
-            ? ((categories as string).split(",") as beatmap_category[])
-            : [],
-    });
-
-    if (error != null) res.status(500).send(error);
-    res.send(beatmapsets);
+    try {
+        const { beatmapsets, error } = await v2.search({
+            type: "beatmaps",
+            query: q as string,
+            _nsfw: nfsw === "1",
+            status: (status as beatmap_statuses) || "any",
+            mode: mode as Modes_names,
+            sort: sort as beatmap_sorting,
+            genre: genre as beatmap_genres,
+        });
+        if (error != null) res.status(500).send(error);
+        res.send(beatmapsets);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
 };
 
 export const getById: RequestHandler = async (req, res) => {

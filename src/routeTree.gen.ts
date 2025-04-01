@@ -16,6 +16,7 @@ import { Route as UpdatesImport } from './routes/updates'
 import { Route as NewsImport } from './routes/news'
 import { Route as IndexImport } from './routes/index'
 import { Route as NewsletterNameImport } from './routes/newsletter.$name'
+import { Route as BeatmapsetIdImport } from './routes/beatmapset.$id'
 
 // Create/Update Routes
 
@@ -46,6 +47,12 @@ const IndexRoute = IndexImport.update({
 const NewsletterNameRoute = NewsletterNameImport.update({
   id: '/newsletter/$name',
   path: '/newsletter/$name',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BeatmapsetIdRoute = BeatmapsetIdImport.update({
+  id: '/beatmapset/$id',
+  path: '/beatmapset/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,6 +88,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersImport
       parentRoute: typeof rootRoute
     }
+    '/beatmapset/$id': {
+      id: '/beatmapset/$id'
+      path: '/beatmapset/$id'
+      fullPath: '/beatmapset/$id'
+      preLoaderRoute: typeof BeatmapsetIdImport
+      parentRoute: typeof rootRoute
+    }
     '/newsletter/$name': {
       id: '/newsletter/$name'
       path: '/newsletter/$name'
@@ -98,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRoute
   '/updates': typeof UpdatesRoute
   '/users': typeof UsersRoute
+  '/beatmapset/$id': typeof BeatmapsetIdRoute
   '/newsletter/$name': typeof NewsletterNameRoute
 }
 
@@ -106,6 +121,7 @@ export interface FileRoutesByTo {
   '/news': typeof NewsRoute
   '/updates': typeof UpdatesRoute
   '/users': typeof UsersRoute
+  '/beatmapset/$id': typeof BeatmapsetIdRoute
   '/newsletter/$name': typeof NewsletterNameRoute
 }
 
@@ -115,15 +131,35 @@ export interface FileRoutesById {
   '/news': typeof NewsRoute
   '/updates': typeof UpdatesRoute
   '/users': typeof UsersRoute
+  '/beatmapset/$id': typeof BeatmapsetIdRoute
   '/newsletter/$name': typeof NewsletterNameRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/news' | '/updates' | '/users' | '/newsletter/$name'
+  fullPaths:
+    | '/'
+    | '/news'
+    | '/updates'
+    | '/users'
+    | '/beatmapset/$id'
+    | '/newsletter/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/news' | '/updates' | '/users' | '/newsletter/$name'
-  id: '__root__' | '/' | '/news' | '/updates' | '/users' | '/newsletter/$name'
+  to:
+    | '/'
+    | '/news'
+    | '/updates'
+    | '/users'
+    | '/beatmapset/$id'
+    | '/newsletter/$name'
+  id:
+    | '__root__'
+    | '/'
+    | '/news'
+    | '/updates'
+    | '/users'
+    | '/beatmapset/$id'
+    | '/newsletter/$name'
   fileRoutesById: FileRoutesById
 }
 
@@ -132,6 +168,7 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRoute
   UpdatesRoute: typeof UpdatesRoute
   UsersRoute: typeof UsersRoute
+  BeatmapsetIdRoute: typeof BeatmapsetIdRoute
   NewsletterNameRoute: typeof NewsletterNameRoute
 }
 
@@ -140,6 +177,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRoute,
   UpdatesRoute: UpdatesRoute,
   UsersRoute: UsersRoute,
+  BeatmapsetIdRoute: BeatmapsetIdRoute,
   NewsletterNameRoute: NewsletterNameRoute,
 }
 
@@ -157,6 +195,7 @@ export const routeTree = rootRoute
         "/news",
         "/updates",
         "/users",
+        "/beatmapset/$id",
         "/newsletter/$name"
       ]
     },
@@ -171,6 +210,9 @@ export const routeTree = rootRoute
     },
     "/users": {
       "filePath": "users.tsx"
+    },
+    "/beatmapset/$id": {
+      "filePath": "beatmapset.$id.tsx"
     },
     "/newsletter/$name": {
       "filePath": "newsletter.$name.tsx"

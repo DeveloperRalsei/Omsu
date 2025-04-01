@@ -3,7 +3,6 @@ import App from "../App";
 import { routes } from "../data/routes";
 import { NotFoundComponent } from "../componenets/app/not-found-component";
 import { showNotification } from "@mantine/notifications";
-import { Title } from "@mantine/core";
 
 export const Route = createRootRoute({
     component: RootComponent,

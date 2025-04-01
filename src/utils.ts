@@ -10,24 +10,30 @@ export const getBeatmapsets = async ({
     q,
     status,
     mode,
-    sort,
     nfsw,
-    categories,
+    genre,
 }: BeatmapFormValues): Promise<beatmapset[]> => {
     const params = new URLSearchParams();
 
     if (q) params.append("q", q);
     if (status) params.append("status", status);
     if (mode) params.append("mode", mode);
-    if (sort) params.append("sort", sort);
     if (nfsw) params.append("nfsw", "1");
-    if (categories.length > 0)
-        params.append("categories", categories.join(","));
+    if (genre) params.append("genre", genre);
 
     const res = await fetch(`/api/beatmapsets?${params.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch beatmapsets");
     return res.json();
 };
+
+export const getBeatmapsetById = async (
+    id: number | string,
+): Promise<beatmapset> =>
+    fetch(`/api/beatmapset/${id}`)
+        .then((res) => res.json())
+        .catch((err) => {
+            throw new Error(err);
+        });
 
 export const getNews = async (): Promise<Newsletter[]> => {
     const res = await fetch("/api/news");
